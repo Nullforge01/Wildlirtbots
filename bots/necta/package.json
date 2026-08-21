@@ -1,0 +1,33 @@
+{
+  "name": "necta-bot",
+  "version": "1.0.0",
+  "description": "Necta — WhatsApp bot by Wild Lirt Studio (developed by Nullforge)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.9",
+    "dotenv": "^16.4.5",
+    "@hapi/boom": "^10.0.1",
+    "axios": "^1.7.7",
+    "chalk": "^4.1.2",
+    "express": "^4.21.0",
+    "form-data": "^4.0.0",
+    "fs-extra": "^11.2.0",
+    "moment-timezone": "^0.5.45",
+    "node-telegram-bot-api": "^0.66.0",
+    "pino": "^9.4.0",
+    "qrcode": "^1.5.4",
+    "yt-search": "^2.11.1",
+    "@distube/ytdl-core": "^4.14.4",
+    "openai": "^4.63.0",
+    "cheerio": "^1.0.0",
+    "sharp": "^0.33.5",
+    "fluent-ffmpeg": "^2.1.3",
+    "@vitalets/google-translate-api": "^9.2.0",
+    "node-fetch": "^2.7.0",
+    "file-type": "^16.5.4",
+    "node-id3": "^0.2.6"
+  }
+}
