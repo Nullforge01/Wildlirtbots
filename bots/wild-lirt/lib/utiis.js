@@ -84,4 +84,4 @@ export const safeCalc = (expr) => {
         throw new Error('Invalid expression')
     }
     return result
-}
+        }
