@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wild Lirt Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --grad-a:#31c48d;
+    --grad-b:#1aa3a3;
+    --amber:#f5a524;
+    --amber-soft:rgba(245,165,36,.12);
+    --cyan:#2fa8c4;
+    --cyan-soft:rgba(47,168,196,.12);
+    --violet:#8b6cf0;
+    --violet-soft:rgba(139,108,240,.12);
+    --pink:#e0668f;
+    --pink-soft:rgba(224,102,143,.12);
+    --radius-lg:18px;
+    --radius-md:12px;
+    --radius-sm:8px;
+  }
+  html[data-theme="light"]{
+    --bg:#f6f9f5; --bg-elevated:#ffffff; --bg-card:#ffffff; --sidebar:#ffffff;
+    --accent:#1f9d5c; --accent-soft:rgba(31,157,92,.10); --accent-strong:#177a48;
+    --text:#152018; --text-dim:#5c6d60; --text-faint:#96a69a;
+    --border:rgba(21,32,24,.08); --border-strong:rgba(21,32,24,.16);
+    --shadow-sm:0 1px 2px rgba(20,30,22,.04); --shadow-md:0 12px 28px -10px rgba(20,40,25,.16);
+    --overlay:rgba(15,25,18,.45);
+  }
+  html[data-theme="dark"]{
+    --bg:#0a100c; --bg-elevated:#121b14; --bg-card:#141f17; --sidebar:#0a0f0b;
+    --accent:#5fe39a; --accent-soft:rgba(95,227,154,.14); --accent-strong:#7cf0ac;
+    --text:#eef5ee; --text-dim:#95a89a; --text-faint:#5c6e60;
+    --border:rgba(238,245,238,.08); --border-strong:rgba(238,245,238,.16);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.3); --shadow-md:0 16px 32px -12px rgba(0,0,0,.55);
+    --overlay:rgba(3,6,4,.65);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--bg); color:var(--text); font-family:'Inter',sans-serif;
+    display:grid; grid-template-columns:264px 1fr; min-height:100vh;
+    transition:background .25s ease, color .25s ease;
+  }
+  ::selection{background:var(--accent-soft); color:var(--accent-strong);}
+  a{color:inherit;}
+
+  /* ---------- SIDEBAR ---------- */
+  aside{
+    background:var(--sidebar); border-right:1px solid var(--border); padding:26px 18px;
+    display:flex; flex-direction:column; gap:22px; position:sticky; top:0; height:100vh;
+    transition:background .25s ease, border-color .25s ease; overflow-y:auto;
+  }
+  .brand-row{display:flex; align-items:center; justify-content:space-between;}
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-icon{
+    width:34px; height:34px; border-radius:10px;
+    background:linear-gradient(135deg,var(--grad-a),var(--grad-b));
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; color:#fff; box-shadow:var(--shadow-sm); flex-shrink:0;
+  }
+  .brand-text{display:flex; flex-direction:column; line-height:1.2;}
+  .brand-mark{font-family:'Fraunces',serif; font-weight:600; font-size:16.5px; letter-spacing:-.01em;}
+  .brand-sub{font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint);}
+
+  .theme-toggle{
+    width:46px; height:25px; border-radius:20px; background:var(--bg-elevated);
+    border:1px solid var(--border-strong); position:relative; cursor:pointer; flex-shrink:0;
+    transition:background .2s;
+  }
+  .theme-toggle .knob{
+    position:absolute; top:2px; left:2px; width:19px; height:19px; border-radius:50%;
+    background:linear-gradient(135deg,var(--grad-a),var(--grad-b));
+    display:flex; align-items:center; justify-content:center; font-size:10px;
+    transition:left .22s cubic-bezier(.4,0,.2,1); color:#fff;
+  }
+  html[data-theme="dark"] .theme-toggle .knob{left:23px;}
+
+  .stat-strip{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--accent-strong);
+    background:var(--accent-soft); padding:8px 11px; border-radius:var(--radius-sm);
+    display:flex; align-items:center; gap:6px;
+  }
+  .stat-strip::before{content:'●'; font-size:8px;}
+
+  .profile-card{
+    display:flex; align-items:center; gap:10px; padding:10px; border-radius:var(--radius-md);
+    background:var(--bg-elevated); border:1px solid var(--border);
+  }
+  .avatar{
+    width:34px; height:34px; border-radius:50%; flex-shrink:0;
+    background:linear-gradient(135deg,var(--cyan),var(--grad-b));
+    display:flex; align-items:center; justify-content:center; color:#fff; font-weight:600; font-size:13px;
+  }
+  .profile-meta{line-height:1.25;}
+  .profile-name{font-size:13px; font-weight:600;}
+  .profile-plan{font-size:11px; color:var(--text-faint); font-family:'IBM Plex Mono',monospace;}
+
+  nav.primary-nav{display:flex; flex-direction:column; gap:3px;}
+  .nav-btn{
+    display:flex; align-items:center; gap:11px; background:none; border:none; cursor:pointer;
+    color:var(--text-dim); font-family:'Inter',sans-serif; font-size:14px; font-weight:500;
+    padding:10px 12px; border-radius:var(--radius-sm); text-align:left; position:relative;
+    transition:background .15s, color .15s; width:100%;
+  }
+  .nav-btn:hover{background:var(--bg-elevated); color:var(--text);}
+  .nav-btn.active{background:var(--accent-soft); color:var(--accent-strong); font-weight:600;}
+  .nav-btn.active::before{
+    content:''; position:absolute; left:-18px; top:50%; transform:translateY(-50%);
+    width:3px; height:18px; background:var(--accent); border-radius:3px;
+  }
+  .nav-icon{width:17px; text-align:center; font-size:15px;}
+  .nav-badge{
+    margin-left:auto; font-size:10px; font-family:'IBM Plex Mono',monospace;
+    background:var(--violet-soft); color:var(--violet); padding:2px 7px; border-radius:20px;
+  }
+
+  .sidebar-section-label{
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--text-faint); margin-bottom:10px;
+  }
+  .mybots-list{display:flex; flex-direction:column; gap:7px;}
+  .mybot-row{
+    display:flex; align-items:center; justify-content:space-between; padding:9px 11px;
+    border-radius:var(--radius-sm); background:var(--bg-elevated); border:1px solid var(--border); font-size:12.5px;
+  }
+  .status-dot{width:7px; height:7px; border-radius:50%; flex-shrink:0;}
+  .status-dot.online{background:var(--accent); box-shadow:0 0 6px var(--accent);}
+  .mybot-name{display:flex; align-items:center; gap:8px; color:var(--text-dim); font-weight:500;}
+  .mybot-empty{font-size:12px; color:var(--text-faint); font-style:italic; padding:6px 2px;}
+
+  .sidebar-bottom{margin-top:auto; display:flex; flex-direction:column; gap:2px; border-top:1px solid var(--border); padding-top:14px;}
+  .sidebar-bottom .nav-btn{color:var(--text-faint); font-size:13px;}
+
+  /* ---------- MAIN ---------- */
+  main{padding:44px 54px 0; max-width:1180px; display:flex; flex-direction:column; min-height:100vh;}
+  .page-wrap{flex-grow:1; padding-bottom:70px;}
+  .page{display:none; animation:fadein .35s ease;}
+  .page.active{display:block;}
+  @keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent-strong); margin-bottom:14px; display:flex; align-items:center; gap:8px;
+  }
+  .eyebrow::before{content:''; width:14px; height:1px; background:var(--accent);}
+
+  h1.page-title{
+    font-family:'Fraunces',serif; font-weight:600; font-size:44px; line-height:1.08;
+    letter-spacing:-0.018em; max-width:680px;
+  }
+  h1.page-title .grad{
+    background:linear-gradient(100deg,var(--grad-a),var(--cyan));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    font-style:italic; font-weight:500;
+  }
+  .page-desc{color:var(--text-dim); font-size:15.5px; max-width:560px; margin-top:16px; line-height:1.65;}
+
+  /* ---------- HOME HERO ---------- */
+  .hero{
+    position:relative; display:grid; grid-template-columns:1.1fr .9fr; gap:40px;
+    align-items:center; padding:36px 40px 56px; border-radius:24px; overflow:hidden;
+    background:var(--bg-elevated); border:1px solid var(--border); margin-bottom:52px; box-shadow:var(--shadow-sm);
+  }
+  .hero::before{
+    content:''; position:absolute; top:-120px; right:-120px; width:340px; height:340px;
+    background:radial-gradient(circle,var(--grad-a) 0%, transparent 70%); opacity:.18; filter:blur(10px);
+  }
+  .hero > *{position:relative; z-index:1;}
+  .hero-motto{
+    font-family:'Fraunces',serif; font-style:italic; font-weight:500; font-size:13.5px;
+    color:var(--accent-strong); margin-top:14px;
+  }
+
+  .pulse-wrap{
+    position:relative; width:100%; aspect-ratio:1/1; max-width:300px; margin:0 auto;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pulse-ring{
+    position:absolute; border:1.5px solid var(--accent); border-radius:50%; opacity:0;
+    animation:pulse 3.2s cubic-bezier(.2,.7,.3,1) infinite;
+  }
+  .pulse-ring:nth-child(1){width:38%; height:38%; animation-delay:0s;}
+  .pulse-ring:nth-child(2){width:38%; height:38%; animation-delay:1.05s;}
+  .pulse-ring:nth-child(3){width:38%; height:38%; animation-delay:2.1s;}
+  @keyframes pulse{0%{transform:scale(1); opacity:.6;} 100%{transform:scale(2.7); opacity:0;}}
+  .pulse-core{
+    width:15%; height:15%; border-radius:50%; background:linear-gradient(135deg,var(--grad-a),var(--cyan));
+    box-shadow:0 0 30px 6px var(--accent-soft); position:relative; z-index:2;
+  }
+  .pulse-code{
+    position:absolute; bottom:4%; left:50%; transform:translateX(-50%);
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); letter-spacing:.08em; white-space:nowrap;
+  }
+
+  .btn{
+    font-family:'Inter',sans-serif; font-weight:600; font-size:14px; padding:12.5px 24px;
+    border-radius:30px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+    transition:transform .12s ease, box-shadow .15s ease, opacity .12s ease;
+  }
+  .btn:active{transform:scale(.97);}
+  .btn-primary{
+    background:linear-gradient(120deg,var(--grad-a),var(--grad-b)); color:#fff;
+    box-shadow:0 8px 20px -8px rgba(31,157,92,.55);
+  }
+  .btn-primary:hover{box-shadow:0 10px 24px -8px rgba(31,157,92,.7); transform:translateY(-1px);}
+  .btn-ghost{background:var(--bg-elevated); color:var(--text); border:1px solid var(--border-strong);}
+  .btn-ghost:hover{background:var(--bg); border-color:var(--accent);}
+  .btn-small{padding:9px 16px; font-size:12.5px; border-radius:24px;}
+  .btn-disabled{
+    background:var(--bg-elevated); color:var(--text-faint); border:1px solid var(--border);
+    cursor:not-allowed; padding:9px 16px; font-size:12.5px; border-radius:24px;
+  }
+
+  .steps{display:flex; flex-direction:column; gap:0; margin-top:8px;}
+  .step{display:flex; gap:16px; padding:16px 0; border-top:1px solid var(--border);}
+  .step:last-child{border-bottom:1px solid var(--border);}
+  .step-num{font-family:'IBM Plex Mono',monospace; color:var(--accent-strong); font-size:13px; width:28px; flex-shrink:0; padding-top:2px;}
+  .step-body h4{font-size:14.5px; font-weight:600; margin-bottom:4px;}
+  .step-body p{font-size:13.5px; color:var(--text-dim); line-height:1.5;}
+
+  .preview-row{margin-top:56px;}
+  .section-label{display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;}
+  .section-label h3{font-family:'Fraunces',serif; font-size:21px; font-weight:600;}
+  .link-out{font-size:12.5px; color:var(--text-dim); text-decoration:none; font-family:'IBM Plex Mono',monospace; cursor:pointer;}
+  .link-out:hover{color:var(--accent-strong);}
+
+  .card-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .bot-card{
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg);
+    padding:22px; display:flex; flex-direction:column; gap:11px;
+    transition:border-color .15s, transform .18s, box-shadow .18s; box-shadow:var(--shadow-sm); position:relative;
+  }
+  .bot-card:hover{border-color:var(--border-strong); transform:translateY(-4px); box-shadow:var(--shadow-md);}
+  .bot-card.coming-soon{opacity:.68;}
+  .bot-card.coming-soon:hover{transform:none; box-shadow:var(--shadow-sm);}
+  .soon-badge{
+    position:absolute; top:16px; right:16px; font-size:10px; font-family:'IBM Plex Mono',monospace;
+    background:var(--violet-soft); color:var(--violet); padding:3px 9px; border-radius:20px; font-weight:600;
+  }
+  .bot-tag{
+    align-self:flex-start; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.08em;
+    text-transform:uppercase; padding:4px 10px; border-radius:20px; font-weight:500;
+  }
+  .tag-utility{background:var(--accent-soft); color:var(--accent-strong);}
+  .tag-dev{background:var(--cyan-soft); color:var(--cyan);}
+  .tag-ai{background:var(--violet-soft); color:var(--violet);}
+  .tag-fun{background:var(--pink-soft); color:var(--pink);}
+  .bot-icon{
+    width:44px; height:44px; border-radius:13px; display:flex; align-items:center; justify-content:center;
+    font-size:20px; background:var(--bg-elevated); border:1px solid var(--border);
+  }
+  .bot-mark{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.14em; color:var(--text-faint);}
+  .bot-card h4{font-family:'Fraunces',serif; font-size:18px; font-weight:600;}
+  .bot-tagline{font-family:'Fraunces',serif; font-style:italic; font-size:12.5px; color:var(--accent-strong); margin-top:-4px;}
+  .bot-card p.desc{font-size:12.5px; color:var(--text-dim); line-height:1.55; flex-grow:1;}
+  .bot-closing{font-size:11px; color:var(--text-faint); font-family:'IBM Plex Mono',monospace; border-top:1px solid var(--border); padding-top:8px; margin-top:2px;}
+  .feature-list{list-style:none; display:flex; flex-direction:column; gap:6px; margin:2px 0;}
+  .feature-list li{font-size:12px; color:var(--text-dim); display:flex; gap:8px; align-items:flex-start;}
+  .feature-list li::before{content:'✓'; color:var(--accent-strong); font-weight:700; flex-shrink:0;}
+  .bot-meta-row{display:flex; align-items:center; justify-content:space-between; font-size:12px;}
+  .price-badge{font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:3px 9px; border-radius:20px; font-weight:500;}
+  .price-free{background:var(--accent-soft); color:var(--accent-strong);}
+  .dev-credit{font-size:11px; color:var(--text-faint); font-family:'IBM Plex Mono',monospace;}
+
+  /* ---------- DASHBOARD ---------- */
+  .dash-grid{display:flex; flex-direction:column; gap:14px; margin-top:32px;}
+  .dash-card{
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg);
+    padding:20px 22px; display:flex; align-items:center; gap:18px; box-shadow:var(--shadow-sm); transition:box-shadow .15s;
+  }
+  .dash-card:hover{box-shadow:var(--shadow-md);}
+  .dash-icon{
+    width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center;
+    font-size:20px; flex-shrink:0; background:var(--accent-soft); color:var(--accent-strong);
+  }
+  .dash-info{flex-grow:1;}
+  .dash-info h4{font-size:15px; font-weight:600; display:flex; align-items:center; gap:8px;}
+  .dash-info .meta{font-size:12px; color:var(--text-faint); margin-top:3px; font-family:'IBM Plex Mono',monospace;}
+  .dash-stats{display:flex; gap:22px; font-size:12px; color:var(--text-dim);}
+  .dash-stats b{color:var(--text); font-weight:700; display:block; font-size:15px;}
+  .dash-actions{display:flex; gap:8px;}
+
+  .account-box{
+    margin-top:40px; padding:24px; border:1px solid var(--border); border-radius:var(--radius-lg);
+    background:var(--bg-card); display:grid; grid-template-columns:1fr 1fr; gap:24px; box-shadow:var(--shadow-sm);
+  }
+  .account-box h4{font-family:'Fraunces',serif; font-size:17px; margin-bottom:6px; grid-column:1/-1;}
+  .field-label{font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.08em; margin-bottom:5px; font-family:'IBM Plex Mono',monospace;}
+  .field-value{font-size:14px; color:var(--text); font-weight:500;}
+
+  /* ---------- REQUEST A BOT PAGE ---------- */
+  .request-layout{display:grid; grid-template-columns:1fr .8fr; gap:32px; margin-top:36px; align-items:start;}
+  .request-form{
+    background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg);
+    padding:30px; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; gap:18px;
+  }
+  .form-row{display:flex; flex-direction:column; gap:6px;}
+  .form-row label{font-size:12px; font-weight:600; color:var(--text-dim);}
+  .form-row .hint{font-size:11.5px; color:var(--text-faint); font-weight:400;}
+  .form-row input, .form-row select, .form-row textarea{
+    padding:12px 14px; border-radius:var(--radius-sm); border:1px solid var(--border-strong);
+    background:var(--bg-elevated); color:var(--text); font-size:13.5px; font-family:'Inter',sans-serif;
+  }
+  .form-row textarea{resize:vertical; min-height:100px; line-height:1.5;}
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus{outline:none; border-color:var(--accent);}
+  .request-side{display:flex; flex-direction:column; gap:14px;}
+  .side-card{background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-sm);}
+  .side-card h5{font-family:'Fraunces',serif; font-size:15.5px; margin-bottom:10px;}
+  .side-card ul{list-style:none; display:flex; flex-direction:column; gap:8px;}
+  .side-card ul li{font-size:12.5px; color:var(--text-dim); display:flex; gap:8px;}
+  .side-card ul li::before{content:'→'; color:var(--accent-strong); flex-shrink:0;}
+  .request-confirm{display:none; text-align:center; padding:50px 20px;}
+  .request-confirm .connected-check{margin:0 auto 18px;}
+  .request-confirm h3{font-family:'Fraunces',serif; font-size:22px; margin-bottom:8px;}
+  .request-confirm p{color:var(--text-dim); font-size:13.5px; max-width:380px; margin:0 auto;}
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    display:none; position:fixed; inset:0; background:var(--overlay); backdrop-filter:blur(4px);
+    align-items:center; justify-content:center; z-index:50;
+  }
+  .modal-overlay.active{display:flex;}
+  .modal{
+    background:var(--bg-card); border:1px solid var(--border-strong); border-radius:20px;
+    padding:34px; width:390px; text-align:center; box-shadow:var(--shadow-md);
+  }
+  .modal-close{float:right; background:none; border:none; color:var(--text-faint); cursor:pointer; font-size:18px;}
+  .modal h3{font-family:'Fraunces',serif; font-size:20px; margin-bottom:6px;}
+  .modal p.sub{font-size:13px; color:var(--text-dim); margin-bottom:22px;}
+  .modal input{
+    width:100%; padding:13px 15px; border-radius:var(--radius-sm); border:1px solid var(--border-strong);
+    background:var(--bg-elevated); color:var(--text); font-size:14px; margin-bottom:16px; font-family:'Inter',sans-serif;
+  }
+  .modal input:focus{outline:none; border-color:var(--accent);}
+  .pairing-code{
+    font-family:'IBM Plex Mono',monospace; font-size:30px; letter-spacing:.12em; color:var(--accent-strong);
+    background:var(--accent-soft); border-radius:var(--radius-md); padding:16px; margin-bottom:16px;
+  }
+  .waiting-text{font-size:12.5px; color:var(--text-dim); font-family:'IBM Plex Mono',monospace; margin-bottom:20px;}
+  .waiting-text .dots::after{content:''; animation:dots 1.4s steps(4,end) infinite;}
+  @keyframes dots{0%,20%{content:'';} 40%{content:'.';} 60%{content:'..';} 80%,100%{content:'...';}}
+  .connected-check{
+    width:54px; height:54px; border-radius:50%; background:var(--accent-soft); color:var(--accent-strong);
+    display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto 16px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--border); padding:22px 0 26px; margin-top:auto;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+  .footer-motto{font-family:'Fraunces',serif; font-style:italic; font-size:13px; color:var(--text-dim);}
+  .footer-credit{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); letter-spacing:.03em;}
+
+  @media (max-width:880px){
+    body{grid-template-columns:1fr;}
+    aside{position:relative; height:auto; flex-direction:row; align-items:center; padding:16px 20px; overflow-x:auto; gap:20px;}
+    aside > *:not(.brand-row):not(nav){display:none;}
+    nav.primary-nav{flex-direction:row;}
+    .nav-btn.active::before{display:none;}
+    main{padding:32px 20px;}
+    .hero{grid-template-columns:1fr; padding:26px;}
+    .card-grid{grid-template-columns:1fr;}
+    .account-box{grid-template-columns:1fr;}
+    .request-layout{grid-template-columns:1fr;}
+    footer{flex-direction:column; align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<aside>
+  <div class="brand-row">
+    <div class="brand">
+      <div class="brand-icon">✦</div>
+      <div class="brand-text">
+        <div class="brand-mark">Wild Lirt</div>
+        <div class="brand-sub">Studio</div>
+      </div>
+    </div>
+    <div class="theme-toggle" id="themeToggle" title="Toggle theme">
+      <div class="knob" id="themeKnob">☀</div>
+    </div>
+  </div>
+
+  <div class="stat-strip">3 bots live · 3 coming soon</div>
+
+  <div class="profile-card">
+    <div class="avatar">TN</div>
+    <div class="profile-meta">
+      <div class="profile-name">Tino</div>
+      <div class="profile-plan">Free plan</div>
+    </div>
+  </div>
+
+  <nav class="primary-nav">
+    <button class="nav-btn active" data-page="home"><span class="nav-icon">⌂</span>Home</button>
+    <button class="nav-btn" data-page="bots"><span class="nav-icon">◈</span>Bots<span class="nav-badge">6</span></button>
+    <button class="nav-btn" data-page="dashboard"><span class="nav-icon">▤</span>Dashboard</button>
+    <button class="nav-btn" data-page="request"><span class="nav-icon">✎</span>Request a Bot</button>
+  </nav>
+
+  <div>
+    <div class="sidebar-section-label">My Bots</div>
+    <div class="mybots-list" id="sidebarMyBots">
+      <div class="mybot-empty">No bots paired yet</div>
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <button class="nav-btn">⚙ Settings</button>
+    <button class="nav-btn">↪ Log out</button>
+  </div>
+</aside>
+
+<main>
+<div class="page-wrap">
+
+  <!-- ================= HOME ================= -->
+  <section class="page active" id="page-home">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Wild Lirt Studio</div>
+        <h1 class="page-title">Bots that live in <span class="grad">your</span> WhatsApp.</h1>
+        <p class="page-desc">Pick a bot, link your number, and it starts answering — no app to install, no new chat window to remember. 3 bots are live now, 3 more are on the way.</p>
+        <div class="hero-motto">"bots that live where u chat"</div>
+        <div style="margin-top:22px; display:flex; gap:12px;">
+          <button class="btn btn-primary" onclick="goTo('bots')">Explore bots →</button>
+          <button class="btn btn-ghost" onclick="goTo('request')">Request a bot</button>
+        </div>
+      </div>
+      <div class="pulse-wrap">
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring"></div>
+        <div class="pulse-core"></div>
+        <div class="pulse-code">tuning in…</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-body"><h4>Pick a bot</h4><p>Browse the catalog and choose the one that fits.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-body"><h4>Enter your number</h4><p>We generate a short pairing code — no QR scanning required.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-body"><h4>Confirm on WhatsApp</h4><p>Enter the code under Linked Devices and the bot goes live on your chat instantly.</p></div>
+      </div>
+    </div>
+
+    <div class="preview-row">
+      <div class="section-label">
+        <h3>Meet the bots</h3>
+        <span class="link-out" onclick="goTo('bots')">See all →</span>
+      </div>
+      <div class="card-grid" id="homePreviewCards"></div>
+    </div>
+  </section>
+
+  <!-- ================= BOTS ================= -->
+  <section class="page" id="page-bots">
+    <div class="eyebrow">Catalog · 3 live, 3 coming soon</div>
+    <h1 class="page-title">Three bots ready. <span class="grad">Three on the way.</span></h1>
+    <p class="page-desc">Each live bot connects to your own WhatsApp number in under a minute. Phantom X, Tapri Queen, and Quantum Xmd are still being built — check back soon.</p>
+
+    <div class="card-grid" id="botsFullCards" style="margin-top:36px;"></div>
+  </section>
+
+  <!-- ================= DASHBOARD ================= -->
+  <section class="page" id="page-dashboard">
+    <div class="eyebrow">Your control room</div>
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-desc">Everything paired to your number, live status, and quick controls.</p>
+
+    <div class="dash-grid" id="dashboardList"></div>
+
+    <div class="account-box">
+      <h4>Account</h4>
+      <div>
+        <div class="field-label">Phone number</div>
+        <div class="field-value">+263 •• ••• 4471</div>
+      </div>
+      <div>
+        <div class="field-label">Notifications</div>
+        <div class="field-value">Pairing alerts on</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= REQUEST A BOT ================= -->
+  <section class="page" id="page-request">
+    <div class="eyebrow">Custom builds</div>
+    <h1 class="page-title">Request a bot <span class="grad">under your name.</span></h1>
+    <p class="page-desc">Tell us what you want it to do and we'll scope, build, and list it — credited to you.</p>
+
+    <div class="request-layout">
+      <div class="request-form" id="requestFormWrap">
+        <div class="form-row">
+          <label>Your name</label>
+          <input type="text" id="reqName" placeholder="How your bot will be credited">
+        </div>
+        <div class="form-row">
+          <label>WhatsApp number <span class="hint">(so we can reach you about it)</span></label>
+          <input type="tel" id="reqPhone" placeholder="+263 77 123 4567">
+        </div>
+        <div class="form-row">
+          <label>Bot name idea</label>
+          <input type="text" id="reqBotName" placeholder="e.g. Ledger, Scout, Quill…">
+        </div>
+        <div class="form-row">
+          <label>Category</label>
+          <select id="reqCategory">
+            <option>AI Chat</option>
+            <option>Utility</option>
+            <option>Developer</option>
+            <option>Fun</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Explain how you'd want it to work</label>
+          <textarea id="reqDesc" placeholder="What should it do when someone messages it? What commands or triggers?"></textarea>
+        </div>
+        <button class="btn btn-primary" style="justify-content:center;" onclick="submitRequest()">Submit request</button>
+      </div>
+
+      <div class="request-side">
+        <div class="side-card">
+          <h5>What makes a good request</h5>
+          <ul>
+            <li>A clear job the bot does, not just a vibe</li>
+            <li>Example messages you'd send it</li>
+            <li>Whether it needs to remember past chats</li>
+          </ul>
+        </div>
+        <div class="side-card">
+          <h5>What happens next</h5>
+          <ul>
+            <li>We review and scope feasibility</li>
+            <li>You get credited as the requester on the listing</li>
+            <li>We message you on WhatsApp once it's live</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="request-confirm" id="requestConfirm">
+      <div class="connected-check">✓</div>
+      <h3>Request received</h3>
+      <p>Thanks — we'll review it and message you on WhatsApp once your bot is scoped or live.</p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="footer-motto">"bots that live where u chat"</div>
+  <div class="footer-credit">Built by Wild Lirt Studio team</div>
+</footer>
+
+</main>
+
+<!-- ================= PAIRING MODAL ================= -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <div id="modalStepInput">
+      <h3 id="modalBotName">Pair a bot</h3>
+      <p class="sub">Enter the WhatsApp number you want to connect.</p>
+      <input type="tel" id="phoneInput" placeholder="+263 77 123 4567">
+      <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="generateCode()">Generate pairing code</button>
+    </div>
+
+    <div id="modalStepCode" style="display:none;">
+      <h3>Enter this code on WhatsApp</h3>
+      <p class="sub">Linked Devices → Link with phone number → enter code</p>
+      <div class="pairing-code" id="pairingCodeText">7K2Q-9XLM</div>
+      <div class="waiting-text" id="waitingText">Waiting for confirmation<span class="dots"></span></div>
+    </div>
+
+    <div id="modalStepDone" style="display:none;">
+      <div class="connected-check">✓</div>
+      <h3>Connected</h3>
+      <p class="sub" id="connectedSub">Your bot is now live on WhatsApp.</p>
+      <button class="btn btn-primary" style="width:100%; justify-content:center;" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  // BOT CATALOG
+  // Live bots point at real scripts you're building. Each has an
+  // `integration` block left blank on purpose - fill these in once
+  // the bot backend/session-manager exists. See generateCode() below
+  // for the other half of this same TODO.
+  // ============================================================
+  const bots = [
+    {
+      id:'procoder-x', icon:'⌘', name:'ProCoder X', category:'dev', tag:'Developer', tagClass:'tag-dev',
+      dev:'Nullforge', comingSoon:false,
+      mark:'⦓ P R O C O D E R  X ⦔',
+      tagline:'Precision. Power. Procoder.',
+      desc:'A powerful WhatsApp assistant built by Nullforge for Wild Lirt Studio.',
+      features:[],
+      closing:'',
+      integration:{ scriptPath:'', sessionId:'', apiEndpoint:'https://procoder-x-tbqx.onrender.com' }
+    },
+    {
+      id:'necta', icon:'🤖', name:'Necta', category:'ai', tag:'AI', tagClass:'tag-ai',
+      dev:'Nullforge and friends', comingSoon:false,
+      mark:'',
+      tagline:'One WhatsApp number, everything you need.',
+      desc:'Chat with AI, download YouTube videos, make stickers, manage your groups, and get instant answers — all without leaving WhatsApp. 289 commands, zero apps to install. Pair it in seconds and Necta\'s ready to go.',
+      features:[
+        'AI Chat & Voice (GPT-4, Gemini, DeepSeek, TTS)',
+        'Media Downloads (YouTube, TikTok, Instagram, Facebook, Spotify, APKs)',
+        'Group Management (Anti-link, Welcome, Promote, Kick, Tagall)',
+        'Fun & Games (Memes, Jokes, Truth/Dare, Tic-Tac-Toe)',
+        'Tools (QR, OCR, Translate, Temp Mail, URL shortener)',
+        'Search (Google, Wikipedia, News, Weather, Sports, Crypto)'
+      ],
+      closing:'Over 290 commands – all inside WhatsApp.',
+      integration:{ scriptPath:'', sessionId:'', apiEndpoint:'/api/necta' }
+    },
+    {
+      id:'wild-lirt', icon:'✦', name:'Wild Lirt', category:'utility', tag:'Utility', tagClass:'tag-utility',
+      dev:'Nullforge', comingSoon:false,
+      mark:'',
+      tagline:'',
+      desc:'A general-purpose WhatsApp group bot — mixing admin/moderation tools with games and utilities, plus a leveling system to keep members engaged.',
+      features:['Admin & moderation tools','Games & utilities','Member leveling system'],
+      closing:'',
+      integration:{ scriptPath:'', sessionId:'', apiEndpoint:'/api/wild-lirt' }
+    },
+    {
+      id:'phantom-x', icon:'◐', name:'Phantom X', category:'ai', tag:'AI', tagClass:'tag-ai',
+      dev:'Nullforge', comingSoon:true,
+      mark:'', tagline:'',
+      desc:'Coming soon — details locked in until the script is further along.',
+      features:[], closing:'',
+      integration:{ scriptPath:'', sessionId:'', apiEndpoint:'' }
+    },
+    {
+      id:'tapri-queen', icon:'♛', name:'Tapri Queen', category:'fun', tag:'Fun', tagClass:'tag-fun',
+      dev:'Nullforge', comingSoon:true,
+      mark:'', tagline:'',
+      desc:'Coming soon — details locked in until the script is further along.',
+      features:[], closing:'',
+      integration:{ scriptPath:'', sessionId:'', apiEndpoint:'' }
+    },
+    {
+      id:'quantum-xmd', icon:'◇', name:'Quantum Xmd', category:'utility', tag:'Utility', tagClass:'tag-utility',
+      dev:'Nullforge', comingSoon:true,
+      mark:'', tagline:'',
+      desc:'Coming soon — details locked in until the script is further along.',
+      features:[], closing:'',
+      integration:{ scriptPath:'', sessionId:'', apiEndpoint:'' }
+    }
+  ];
+
+  let pairedBots = [];
+
+  function cardHTML(bot, full){
+    if(bot.comingSoon){
+      return `
+        <div class="bot-card coming-soon">
+          <div class="soon-badge">Coming soon</div>
+          <span class="bot-tag ${bot.tagClass}">${bot.tag}</span>
+          <div class="bot-icon">${bot.icon}</div>
+          <h4>${bot.name}</h4>
+          <p class="desc">${bot.desc}</p>
+          <div class="dev-credit">by ${bot.dev}</div>
+          <button class="btn-disabled" disabled>Not yet available</button>
+        </div>`;
+    }
+    return `
+      <div class="bot-card">
+        <span class="bot-tag ${bot.tagClass}">${bot.tag}</span>
+        <div class="bot-icon">${bot.icon}</div>
+        ${bot.mark ? `<div class="bot-mark">${bot.mark}</div>` : ''}
+        <h4>${bot.name}</h4>
+        ${bot.tagline ? `<div class="bot-tagline">${bot.tagline}</div>` : ''}
+        <p class="desc">${bot.desc}</p>
+        ${full && bot.features.length ? `<ul class="feature-list">${bot.features.map(f=>`<li>${f}</li>`).join('')}</ul>` : ''}
+        ${full && bot.closing ? `<div class="bot-closing">${bot.closing}</div>` : ''}
+        <div class="bot-meta-row">
+          <span class="dev-credit">by ${bot.dev}</span>
+          <span class="price-badge price-free">Free</span>
+        </div>
+        <button class="btn btn-primary btn-small" onclick="openModal('${bot.id}')">Pair now</button>
+      </div>`;
+  }
+
+  document.getElementById('homePreviewCards').innerHTML = bots.filter(b=>!b.comingSoon).map(b=>cardHTML(b,false)).join('');
+  document.getElementById('botsFullCards').innerHTML = bots.map(b=>cardHTML(b,true)).join('');
+
+  function renderSidebarAndDashboard(){
+    const sideEl = document.getElementById('sidebarMyBots');
+    const dashEl = document.getElementById('dashboardList');
+    if(pairedBots.length === 0){
+      sideEl.innerHTML = `<div class="mybot-empty">No bots paired yet</div>`;
+      dashEl.innerHTML = `<div class="mybot-empty" style="padding:20px 0;">Nothing here yet — pair a bot from the catalog to see it show up.</div>`;
+      return;
+    }
+    sideEl.innerHTML = pairedBots.map(b=>`
+      <div class="mybot-row">
+        <div class="mybot-name"><span class="status-dot online"></span>${b.name}</div>
+      </div>`).join('');
+
+    dashEl.innerHTML = pairedBots.map(b=>`
+      <div class="dash-card">
+        <div class="dash-icon">${b.icon}</div>
+        <div class="dash-info">
+          <h4>${b.name} <span class="status-dot online"></span></h4>
+          <div class="meta">paired just now · session active</div>
+        </div>
+        <div class="dash-stats">
+          <div><b>0</b>msgs</div>
+          <div><b>online</b>status</div>
+        </div>
+        <div class="dash-actions">
+          <button class="btn btn-ghost btn-small">Pause</button>
+          <button class="btn btn-ghost btn-small">Unpair</button>
+        </div>
+      </div>`).join('');
+  }
+  renderSidebarAndDashboard();
+
+  function goTo(page){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-'+page).classList.add('active');
+    document.querySelectorAll('.nav-btn[data-page]').forEach(b=>b.classList.remove('active'));
+    document.querySelector(`.nav-btn[data-page="${page}"]`).classList.add('active');
+  }
+  document.querySelectorAll('.nav-btn[data-page]').forEach(btn=>{
+    btn.addEventListener('click', ()=>goTo(btn.dataset.page));
+  });
+
+  const themeToggle = document.getElementById('themeToggle');
+  const themeKnob = document.getElementById('themeKnob');
+  themeToggle.addEventListener('click', ()=>{
+    const html = document.documentElement;
+    const isLight = html.getAttribute('data-theme') === 'light';
+    html.setAttribute('data-theme', isLight ? 'dark' : 'light');
+    themeKnob.textContent = isLight ? '☾' : '☀';
+  });
+
+  let currentBot = null;
+  function openModal(botId){
+    currentBot = bots.find(b=>b.id===botId);
+    if(currentBot.comingSoon) return;
+    document.getElementById('modalBotName').textContent = `Pair ${currentBot.name}`;
+    document.getElementById('modalStepInput').style.display='block';
+    document.getElementById('modalStepCode').style.display='none';
+    document.getElementById('modalStepDone').style.display='none';
+    document.getElementById('phoneInput').value='';
+    document.getElementById('modalOverlay').classList.add('active');
+  }
+  function closeModal(){
+    document.getElementById('modalOverlay').classList.remove('active');
+  }
+  function randomCode(){
+    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let a='', b='';
+    for(let i=0;i<4;i++) a+=chars[Math.floor(Math.random()*chars.length)];
+    for(let i=0;i<4;i++) b+=chars[Math.floor(Math.random()*chars.length)];
+    return a+'-'+b;
+  }
+
+  // ============================================================
+  // BOT INTEGRATION - now live once you fill in a bot's apiEndpoint above.
+  //
+  // Fill in each bot's integration.apiEndpoint once it's deployed, e.g.
+  //   integration: { apiEndpoint: 'https://wild-lirt-bot.fly.dev' }
+  // (that's the base URL your host gives the app - Fly.io, Railway, etc.
+  // each expose a route like /pair and /status, matching index.js in the
+  // techbot-baileys backend)
+  //
+  // With apiEndpoint blank, this falls back to the fake demo flow so the
+  // site still previews fine before any bot is actually deployed.
+  // ============================================================
+  async function generateCode(){
+    const phoneNumber = document.getElementById('phoneInput').value.trim();
+    if(!phoneNumber){
+      alert('Enter a WhatsApp number first.');
+      return;
+    }
+
+    document.getElementById('modalStepInput').style.display='none';
+    document.getElementById('modalStepCode').style.display='block';
+
+    const endpoint = currentBot.integration && currentBot.integration.apiEndpoint;
+
+    if(!endpoint){
+      // ---- DEMO MODE (no backend wired up yet) ----
+      document.getElementById('pairingCodeText').textContent = randomCode();
+      setTimeout(()=> markConnected(), 3200);
+      return;
+    }
+
+    // ---- LIVE MODE ----
+    try{
+      const res = await fetch(`${endpoint}/pair`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ phoneNumber })
+      });
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || 'Pairing failed');
+
+      document.getElementById('pairingCodeText').textContent = data.code;
+      pollStatus(endpoint);
+    }catch(err){
+      document.getElementById('waitingText').textContent = `Error: ${err.message}`;
+      console.error('[PAIR ERROR]', err);
+    }
+  }
+
+  function pollStatus(endpoint){
+    const interval = setInterval(async ()=>{
+      try{
+        const res = await fetch(`${endpoint}/status`);
+        const data = await res.json();
+        if(data.status === 'connected'){
+          clearInterval(interval);
+          markConnected();
+        }
+      }catch(err){
+        console.error('[STATUS POLL ERROR]', err);
+      }
+    }, 3000);
+
+    // stop polling after 2 minutes so a failed pairing doesn't poll forever
+    setTimeout(()=> clearInterval(interval), 120000);
+  }
+
+  function markConnected(){
+    document.getElementById('modalStepCode').style.display='none';
+    document.getElementById('modalStepDone').style.display='block';
+    document.getElementById('connectedSub').textContent = `${currentBot.name} is now live on WhatsApp.`;
+    if(!pairedBots.find(b=>b.id===currentBot.id)){
+      pairedBots.push(currentBot);
+      renderSidebarAndDashboard();
+    }
+  }
+
+  function submitRequest(){
+    document.getElementById('requestFormWrap').parentElement.style.display='none';
+    document.getElementById('requestConfirm').style.display='block';
+  }
+</script>
+
+</body>
+</html>
