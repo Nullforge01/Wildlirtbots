@@ -1,0 +1,17 @@
+{
+  "name": "wild-lirt-studio-combined",
+  "version": "1.0.0",
+  "description": "Wild Lirt Studio - website + Necta + Wild Lirt bots as one deployable server (ProCoder X stays separate)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "install-all": "npm install && npm install --prefix bots/necta && npm install --prefix bots/wild-lirt"
+  },
+  "dependencies": {
+    "express": "^4.19.0",
+    "http-proxy-middleware": "^2.0.6"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
