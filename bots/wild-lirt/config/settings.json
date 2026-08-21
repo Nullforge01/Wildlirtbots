@@ -1,0 +1,38 @@
+{
+  "botName": "WILD LIRT",
+  "version": "1.0.0",
+  "ownerName": "nullforge",
+  "ownerNum": "79243079195",
+  "prefix": "",
+  "public": false,
+  "roastEnabled": false,
+  "whitelist": [
+    "ping",
+    "p", 
+    "speed",
+    "info",
+    "runtime",
+    "owner",
+    "donate",
+    "help",
+    "list",
+    "menu"
+  ],
+  "admins": [],
+  "autoRead": true,
+  "antiSpam": {
+    "enabled": true,
+    "messages": 5,
+    "interval": 10,
+    "action": "warn"
+  },
+  "welcome": {
+    "enabled": false,
+    "message": "Welcome @user to @group"
+  },
+  "goodbye": {
+    "enabled": false,
+    "message": "Goodbye @user"
+  },
+  "cooldown": 3
+}
