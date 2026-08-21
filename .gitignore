@@ -1,0 +1,12 @@
+node_modules/
+bots/necta/node_modules/
+bots/wild-lirt/node_modules/
+bots/necta/session/*
+bots/necta/temp/*
+bots/necta/logs/*
+bots/necta/tmp/*
+bots/wild-lirt/session/*
+!**/.gitkeep
+.env
+.DS_Store
+*.log
