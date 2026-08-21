@@ -1,0 +1,86 @@
+
+  "quotes": [
+    "Code is like humor. When you have to explain it, it's bad.",
+    "First, solve the problem. Then, write the code.",
+    "Experience is the name everyone gives to their mistakes.",
+    "Make it work, make it right, make it fast.",
+    "Talk is cheap. Show me the code.",
+    "Simplicity is the soul of efficiency.",
+    "Programs must be written for people to read.",
+    "The best error message is the one that never shows up.",
+    "Any fool can write code that a computer can understand.",
+    "Before software can be reusable it first has to be usable."
+  ],
+  "jokes": [
+    "Why do programmers prefer dark mode? Because light attracts bugs.",
+    "How many programmers does it take to change a light bulb? None. That's a hardware problem.",
+    "Why do Java developers wear glasses? Because they can't C#.",
+    "A SQL query walks into a bar, walks up to two tables and asks: Can I join you?",
+    "I would tell you a UDP joke but you might not get it.",
+    "What's a programmer's favorite hangout place? Foo Bar.",
+    "Why did the developer go broke? Because he used up all his cache.",
+    "An optimist says: the glass is half-full. A programmer says: the glass is twice as large as necessary.",
+    "Why did the functions stop calling each other? They had too many arguments.",
+    "What's the object-oriented way to become wealthy? Inheritance."
+  ],
+  "facts": [
+    "The first computer bug was an actual moth found in a Harvard Mark II computer in 1947.",
+    "The first 1GB hard drive was announced in 1980 and cost $40,000.",
+    "JavaScript was created in 10 days in 1995 by Brendan Eich.",
+    "The first website ever created is still online at info.cern.ch.",
+    "Python is named after Monty Python, not the snake.",
+    "The QWERTY keyboard layout was designed to slow typists down to prevent typewriter jams.",
+    "There are over 700 programming languages in existence.",
+    "The term pixel is short for picture element.",
+    "CAPTCHA stands for Completely Automated Public Turing test to tell Computers and Humans Apart.",
+    "The first webcam was used at Cambridge to monitor a coffee pot."
+  ],
+  "roasts": [
+    "Your code has more comments than commits.",
+    "You debug like IE renders CSS — slowly and painfully.",
+    "Your GitHub contributions look like a barren desert.",
+    "I'd explain it to you, but I left my crayons at home.",
+    "Your pull requests are like your jokes. Nobody merges them.",
+    "You're the reason we write documentation.",
+    "If you were a design pattern, you'd be an anti-pattern.",
+    "Your commit messages are just as empty as your promises.",
+    "You're like a semicolon in Python — unnecessary and confusing.",
+    "I'd call you a tool, but that implies you're actually useful."
+  ],
+  "truths": [
+    "What's the last lie you told?",
+    "Have you ever copied code without understanding it?",
+    "What's your most used keyboard shortcut?",
+    "Have you ever pushed to main on Friday?",
+    "What's the worst bug you've caused in production?",
+    "Have you ever Googled a basic syntax question?",
+    "What's your most embarrassing dev moment?",
+    "Have you ever blamed the compiler for your mistake?",
+    "What's one tech opinion you pretend to agree with?",
+    "Have you ever left a TODO and never came back?"
+  ],
+  "dares": [
+    "Send your last screenshot in the group.",
+    "Type your current screen brightness percentage.",
+    "Share the last song you listened to.",
+    "Send the 5th photo in your gallery.",
+    "Type with your elbows for the next message.",
+    "Change your bio to 'I love debugging' for 10 mins.",
+    "Send a voice note saying 'Hello World' in a robot voice.",
+    "Screenshot your home screen and send it.",
+    "Type the last command you ran in your terminal.",
+    "Send your current battery percentage."
+  ],
+  "eightball": [
+    "Yes, definitely.",
+    "It is certain.",
+    "Without a doubt.",
+    "Ask again later.",
+    "Cannot predict now.",
+    "Don't count on it.",
+    "My sources say no.",
+    "Very doubtful.",
+    "Signs point to yes.",
+    "Outlook not so good."
+  ]
+}
