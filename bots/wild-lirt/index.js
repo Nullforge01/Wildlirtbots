@@ -1,5 +1,7 @@
 import pkg from '@whiskeysockets/baileys'
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion } = pkg
+const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, fetchLatestWaWebVersion } = pkg
+// v7 may have renamed this function - fall back to whichever one actually exists
+const getLatestVersion = fetchLatestWaWebVersion || fetchLatestBaileysVersion
 import { Boom } from '@hapi/boom'
 import pino from 'pino'
 import readline from 'readline'
@@ -26,13 +28,13 @@ function askQuestion(query) {
 
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState(SESSION_DIR)
-    const { version } = await fetchLatestBaileysVersion()
+    const { version } = await getLatestVersion()
 
     const sock = makeWASocket({
         version,
         auth: state,
-        // Pairing-code login, not QR - printQRInTerminal must stay off
-        printQRInTerminal: false,
+        // v7 removed printQRInTerminal - we don't use QR anyway, pairing is
+        // driven entirely by requestPairingCode() below
         logger: pino({ level: 'silent' }),
         browser: ['Wild Lirt', 'Chrome', '2.0.0']
     })
