@@ -53,12 +53,31 @@ export const isWhitelisted = (cmd) => {
 
 // Save JSON files safely
 export const saveJson = (path, data) => {
-    fs.writeFileSync(path, JSON.stringify(data, null, 2))
+    try {
+        fs.writeFileSync(path, JSON.stringify(data, null, 2))
+    } catch (err) {
+        console.error(`[SAVE ERROR] Failed to save ${path}:`, err.message)
+    }
 }
 
-// Load JSON files
+// Load JSON files with error handling and fallback defaults
 export const loadJson = (path) => {
-    return JSON.parse(fs.readFileSync(path, 'utf8'))
+    try {
+        return JSON.parse(fs.readFileSync(path, 'utf8'))
+    } catch (err) {
+        console.error(`[LOAD ERROR] Failed to load ${path}:`, err.message)
+        // Return safe defaults based on file type
+        if (path.includes('users.json')) {
+            return { _schema: { version: '1.0.0' }, users: {} }
+        } else if (path.includes('groups.json')) {
+            return { _schema: { version: '1.0.0' }, groups: {} }
+        } else if (path.includes('settings.json')) {
+            return { public: false, ownerNum: '', whitelist: [], cooldown: 3 }
+        } else if (path.includes('content.json')) {
+            return { quotes: [], jokes: [], facts: [], roasts: [], truths: [], dares: [], eightball: [] }
+        }
+        return {}
+    }
 }
 
 // Pull plain text out of a Baileys message, whatever type it is
