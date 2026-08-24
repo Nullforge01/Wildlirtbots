@@ -798,6 +798,8 @@
 
     document.getElementById('modalStepInput').style.display='none';
     document.getElementById('modalStepCode').style.display='block';
+    document.getElementById('pairingCodeText').textContent = 'Generating code…';
+    document.getElementById('waitingText').textContent = 'Waiting for confirmation';
 
     const endpoint = currentBot.integration && currentBot.integration.apiEndpoint;
 
@@ -821,6 +823,7 @@
       document.getElementById('pairingCodeText').textContent = data.code;
       pollStatus(endpoint);
     }catch(err){
+      document.getElementById('pairingCodeText').textContent = '—';
       document.getElementById('waitingText').textContent = `Error: ${err.message}`;
       console.error('[PAIR ERROR]', err);
     }
