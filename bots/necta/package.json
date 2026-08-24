@@ -7,7 +7,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "^6.7.9",
+    "@whiskeysockets/baileys": "7.0.0-rc10",
     "dotenv": "^16.4.5",
     "@hapi/boom": "^10.0.1",
     "axios": "^1.7.7",
@@ -28,6 +28,9 @@
     "@vitalets/google-translate-api": "^9.2.0",
     "node-fetch": "^2.7.0",
     "file-type": "^16.5.4",
-    "node-id3": "^0.2.6"
+    "node-id3": "^0.2.6",
+    "@octokit/rest": "latest",
+    "ruhend-scraper": "latest",
+    "yt-dlp-exec": "latest"
   }
 }
