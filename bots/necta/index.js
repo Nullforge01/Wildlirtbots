@@ -26,7 +26,6 @@ const REQUIRED_MODULES = [
     'qrcode','yt-search','@distube/ytdl-core','openai','cheerio',
     'sharp','fluent-ffmpeg','@vitalets/google-translate-api',
     'node-fetch','ruhend-scraper','yt-dlp-exec','file-type','node-id3'
-   
 ];
 function autoInstallModules() {
     const missing = [];
@@ -88,7 +87,7 @@ const makeCacheableSignalKeyStore = B.makeCacheableSignalKeyStore || bf.makeCach
 const Browsers = B.Browsers || bf.Browsers;
 const jidNormalizedUser = B.jidNormalizedUser || bf.jidNormalizedUser;
 const downloadContentFromMessage = B.downloadContentFromMessage || bf.downloadContentFromMessage;
-const fetchLatestBaileysVersion = B.fetchLatestBaileysVersion || bf.fetchLatestBaileysVersion;
+const fetchLatestBaileysVersion = B.fetchLatestWaWebVersion || B.fetchLatestBaileysVersion || bf.fetchLatestBaileysVersion;
 const DisconnectReason = B.DisconnectReason || bf.DisconnectReason;
 const proto = B.proto || bf.proto;
 const prepareWAMessageMedia = B.prepareWAMessageMedia || bf.prepareWAMessageMedia;
