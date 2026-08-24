@@ -50,3 +50,4 @@ function getCurrentDateTime() {
 }
 
 module.exports = { isValidBuffer, generateId, parseTime, formatTimeLeft, formatMessage, fmtBytes, getCurrentDateTime };
+    
