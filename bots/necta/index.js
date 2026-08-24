@@ -24,8 +24,9 @@ const REQUIRED_MODULES = [
     '@whiskeysockets/baileys','@octokit/rest','axios','chalk','express',
     'form-data','fs-extra','moment-timezone','node-telegram-bot-api','pino',
     'qrcode','yt-search','@distube/ytdl-core','openai','cheerio',
-    'sharp','fluent-ffmpeg','@vitalets/google-translate-api','denethdev-ytmp3',
+    'sharp','fluent-ffmpeg','@vitalets/google-translate-api',
     'node-fetch','ruhend-scraper','yt-dlp-exec','file-type','node-id3'
+   
 ];
 function autoInstallModules() {
     const missing = [];
