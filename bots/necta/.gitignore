@@ -1,0 +1,33 @@
+# Necta Bot
+# Wild Lirt Studio - WhatsApp Bot
+
+# Environment and directories
+node_modules/
+package-lock.json
+session/
+session_*/
+data/
+temp/
+tmp/
+logs/
+*.log
+
+# Credentials and secrets
+.env
+.env.local
+.env.*.local
+
+# IDE and OS
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Runtime
+*.pid
+.cache/
+.npm/
+*.tgz
