@@ -1,7 +1,10 @@
-import pkg from '@whiskeysockets/baileys'
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, fetchLatestWaWebVersion } = pkg
-// v7 may have renamed this function - fall back to whichever one actually exists
-const getLatestVersion = fetchLatestWaWebVersion || fetchLatestBaileysVersion
+import * as baileysPkg from '@whiskeysockets/baileys'
+const makeWASocket = baileysPkg.default
+const { useMultiFileAuthState, DisconnectReason } = baileysPkg
+// v7 may have renamed this function - fall back to whichever one actually exists.
+// Reading these off the namespace object (not a named import) means this won't
+// crash even if one of the two names doesn't exist in whatever version installs.
+const getLatestVersion = baileysPkg.fetchLatestWaWebVersion || baileysPkg.fetchLatestBaileysVersion
 import { Boom } from '@hapi/boom'
 import pino from 'pino'
 import readline from 'readline'
